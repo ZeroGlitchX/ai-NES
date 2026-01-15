@@ -6,15 +6,16 @@ A modernized Nintendo Entertainment System (NES) emulator written in JavaScript.
 
 * ✅ **Pure JavaScript** — Runs in any modern browser, no plugins required
 * ✅ **ES6 Modules** — Clean, maintainable codebase with proper imports/exports
-* ✅ **Modern Audio** — AudioWorklet-based sound with ScriptProcessor fallback
+* ✅ **Modern Audio** — AudioWorklet-based sound system
 * ✅ **Expansion Audio Mixing** — MMC5 pulse + PCM audio mixed into APU output
 * ✅ **Capability‑Driven Mappers** — The PPU interacts with mappers strictly through declared behavioral capabilities (no mapper IDs, no method‑presence heuristics)
 * ✅ **Accurate Mapper Emulation** — Correct MMC1, MMC2, MMC3, MMC4, MMC5, and Sunsoft FME-7 (Mapper 069) behavior
 * ✅ **CHR Latch Accuracy** — Hardware‑accurate MMC2/MMC4 latch triggering using real pattern fetch addresses (fine‑Y + both bitplanes)
 * ✅ **Stable IRQ Timing** — MMC3 IRQs driven by true A12 rising‑edge detection
-* ✅ **Drag & Drop ROM Loading** — Load `.nes` files directly into the emulator
+* ✅ **Multiple ROM Loading Options** — Load ROM button, drag & drop, or click overlay
+* ✅ **Save States** — Quick save/load with multiple slots (F5/F8)
 * ✅ **Gamepad Support** — Native browser Gamepad API integration
-* ✅ **Debug Snapshots** — F9 dumps mapper/PPU state including MMC5 audio registers
+* ✅ **Debug Snapshots** — F9 dumps mapper/PPU state at configurable scanline
 
 ## Quick Start
 
@@ -33,59 +34,60 @@ A modernized Nintendo Entertainment System (NES) emulator written in JavaScript.
 
 ## Controls
 
-| Keyboard Key | Xbox Controller    | PS5 Controller  |
+| Action       | Keyboard           | Gamepad         |
 | ------------ | ------------------ | --------------- |
-| Arrow Keys   | D‑Pad              | D‑Pad           |
-| Space        | X Button           | Square Button   |
-| A            | A Button           | X Button        |
-| S            | B Button           | Circle Button   |
-| D            | Y Button           | Triangle Button |
-| Enter        | Start              | Options Button  |
-| Tab          | Select             | Create Button   |
+| D-Pad        | Arrow Keys         | D‑Pad           |
+| Button A     | A or Q             | A / X           |
+| Button B     | S or O             | B / Circle      |
+| Start        | Enter              | Start / Options |
+| Select       | Tab                | Back / Create   |
+| Fast Forward | F (hold)           | —               |
 
-Gamepad support is automatic.
+Gamepad support is automatic via the Gamepad API.
 
 ## Project Structure
 
 ```
 ├── nes.htm                     # Main HTML interface
-├── nes.css                     # Stylesheet for modernized UI
+├── nes.css                     # Stylesheet for retro CRT UI
+├── debug/
+│   ├── debug.js                # Debug snapshot module (F9)
+│   └── ...
 └── src/
+    ├── index.js                # Module exports entry point
     ├── nes.js                  # Emulator orchestrator
+    ├── nes-init.js             # Frontend: canvas, audio, input, UI
+    ├── nes-save-states.js      # Save state system
     ├── cpu.js                  # 6502 CPU emulation
     ├── ppu.js                  # Picture Processing Unit (renderer)
     ├── apu.js                  # Audio Processing Unit (APU)
     ├── rom.js                  # iNES ROM parser
-    ├── nes-init.js             # Frontend: canvas, audio, input handling
-    ├── nes-audio-worklet.js    # AudioWorklet processor
-    ├── nes-save-states.js      # Save state system
-    ├── compatibility.js        # Compatibility database
     ├── controller.js           # Input handling
-    ├── palette-table.js        # Default palette tables
+    ├── compatibility.js        # ROM compatibility database
+    ├── palette-table.js        # NES color palettes
     ├── utils.js                # Shared utilities
-    ├── index.js                # Entry point
     └── mappers/
-        ├── mapper-base.js      # The base class (interface)
-        ├── Mapper000.js        # NROM
-        ├── Mapper001.js        # MMC1
-        ├── Mapper002.js        # UNROM
-        ├── Mapper003.js        # CNROM
-        ├── Mapper004.js        # MMC3
-        ├── Mapper005.js        # MMC5
-        ├── mapper005-audio.js  # MMC5 expansion audio module
-        ├── Mapper006.js        # FFE
-        ├── Mapper007.js        # AxROM
-        ├── Mapper009.js        # MMC2
-        ├── Mapper011.js        # Color Dreams
-        ├── Mapper025.js        # VRC2 and VRC4
-        ├── Mapper034.js        # BNROM / NINA-001
-        ├── Mapper047.js        # NES-QJ
-        ├── Mapper066.js        # GxROM
-        ├── Mapper069.js        # Sunsoft FME-7 / Sunsoft 5B
-        ├── Mapper079.js        # NINA-03 / NINA-06
-        ├── Mapper206.js        # DxROM - Extension of MMC3
+        ├── mapper-base.js      # Base class (capability interface)
+        ├── mapper000.js        # NROM
+        ├── mapper001.js        # MMC1
+        ├── mapper002.js        # UNROM
+        ├── mapper003.js        # CNROM
+        ├── mapper004.js        # MMC3
+        ├── mapper005.js        # MMC5
+        ├── mapper005-audio.js  # MMC5 expansion audio
+        ├── mapper006.js        # FFE
+        ├── mapper007.js        # AxROM
+        ├── mapper009.js        # MMC2
+        ├── mapper011.js        # Color Dreams
+        ├── mapper025.js        # VRC2 / VRC4
+        ├── mapper034.js        # BNROM / NINA-001
+        ├── mapper047.js        # NES-QJ
+        ├── mapper066.js        # GxROM
+        ├── mapper069.js        # Sunsoft FME-7 / 5B
+        ├── mapper079.js        # NINA-03 / NINA-06
+        ├── mapper206.js        # DxROM
         ├── ...
-        └── mapper-factory.js   # The "Factory" that groups them
+        └── mapper-factory.js   # Mapper instantiation factory
 ```
 
 ## Supported Mappers
@@ -127,18 +129,28 @@ For deep technical details, see **TECHNICAL.md**.
 
 ### Audio System
 
-The emulator uses a two-tier audio system:
+The emulator uses an **AudioWorklet-based** audio system:
 
-1. **AudioWorklet** (preferred) — Runs on a dedicated audio thread for glitch-free playback
-2. **ScriptProcessor** (fallback) — For browsers without AudioWorklet support
+- Runs on a dedicated audio thread for glitch-free playback
+- Audio samples are batched and sent to the worklet to minimize postMessage overhead
+- Expansion audio sources (such as MMC5) are mixed into the APU output path
 
-Audio samples are batched and sent to the worklet to minimize postMessage overhead.
-Expansion audio sources (such as MMC5) are mixed into the APU output path.
+### Save States
+
+- **F5** — Quick save to current slot
+- **F8** — Quick load from current slot
+- Multiple save slots available via UI dropdown
 
 ### Debugging
 
-- **F9 snapshot** dumps PPU + mapper state to the console (MMC5 includes audio registers)
-- **F4/F5/F10** toggle bus/MMC5/VRAM logging when supported
+The debug module (`debug/debug.js`) provides Mesen-comparable state dumps:
+
+- **F9** — Request snapshot at scanline 241 (VBlank start)
+- Outputs PPU registers, nametables, palette, OAM, scroll state
+- MMC5 games include full mapper state + audio registers
+- Console access: `nesDebug.outputAll()` or `nesDebug.targetScanline = 100`
+
+See `docs/DEBUG INTEGRATION.md` for full documentation.
 
 ## Credits
 
