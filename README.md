@@ -34,14 +34,14 @@ A modernized Nintendo Entertainment System (NES) emulator written in JavaScript.
 
 ## Controls
 
-| Action       | Keyboard           | Gamepad         |
-| ------------ | ------------------ | --------------- |
-| D-Pad        | Arrow Keys         | D‑Pad           |
-| Button A     | A or Q             | A / X           |
-| Button B     | S or O             | B / Circle      |
-| Start        | Enter              | Start / Options |
-| Select       | Tab                | Back / Create   |
-| Fast Forward | F (hold)           | —               |
+| Action       | Keyboard           | XBox Gamepad    | PS5 Gamepad |
+| ------------ | ------------------ | --------------- | ----------- |
+| D-Pad        | Arrow Keys         | D‑Pad           | D-Pad       |
+| Button A     | A or Q             | A               | X           |
+| Button B     | S or O             | B               | Circle      |
+| Start        | Enter              | Start           | Options     |
+| Select       | Tab                | Back            | Create      |
+| Fast Forward | F (hold)           | —               | —           |
 
 Gamepad support is automatic via the Gamepad API.
 
