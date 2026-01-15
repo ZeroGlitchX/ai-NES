@@ -123,7 +123,7 @@ This emulator intentionally avoids hard‑coding mapper IDs inside the PPU or CP
 
 This approach prevents cross‑mapper regressions and makes new mappers significantly easier to add while expanding the library of games that can run.
 
-For deep technical details, see **TECHNICAL.md**.
+For deep technical details, see **[TECHNICAL.md](https://github.com/ZeroGlitchX/ai-NES/blob/main/docs/TECHNICAL.md)**.
 
 ## Development Notes
 
