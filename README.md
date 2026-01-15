@@ -156,7 +156,7 @@ See `docs/DEBUG INTEGRATION.md` for full documentation.
 
 This emulator is inspired by other JavaScript NES emulators, but coded to behave like console reference emulators. The CPU, PPU and APU are built from the ground up to behave like NES hardware.
 
-Contributed by **ZeroGlitch** and an assortment of AI friends.
+Contributed by **ZeroGlitchX** and an assortment of AI friends.
 
 AI Coding Assistance:
 - **[Gemini Pro 3](https://gemini.google.com/)**
