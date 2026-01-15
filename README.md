@@ -4,18 +4,18 @@ A modernized Nintendo Entertainment System (NES) emulator written in JavaScript.
 
 ## Features
 
-* ✅ **Pure JavaScript** — Runs in any modern browser, no plugins required
-* ✅ **ES6 Modules** — Clean, maintainable codebase with proper imports/exports
-* ✅ **Modern Audio** — AudioWorklet-based sound system
-* ✅ **Expansion Audio Mixing** — MMC5 pulse + PCM audio mixed into APU output
-* ✅ **Capability‑Driven Mappers** — The PPU interacts with mappers strictly through declared behavioral capabilities (no mapper IDs, no method‑presence heuristics)
-* ✅ **Accurate Mapper Emulation** — Correct MMC1, MMC2, MMC3, MMC4, MMC5, and Sunsoft FME-7 (Mapper 069) behavior
-* ✅ **CHR Latch Accuracy** — Hardware‑accurate MMC2/MMC4 latch triggering using real pattern fetch addresses (fine‑Y + both bitplanes)
-* ✅ **Stable IRQ Timing** — MMC3 IRQs driven by true A12 rising‑edge detection
-* ✅ **Multiple ROM Loading Options** — Load ROM button, drag & drop, or click overlay
-* ✅ **Save States** — Quick save/load with multiple slots (F5/F8)
-* ✅ **Gamepad Support** — Native browser Gamepad API integration
-* ✅ **Debug Snapshots** — F9 dumps mapper/PPU state at configurable scanline
+* ✅ **Pure JavaScript** - Runs in any modern browser, no plugins required
+* ✅ **ES6 Modules** - Clean, maintainable codebase with proper imports/exports
+* ✅ **Modern Audio** - AudioWorklet-based sound system
+* ✅ **Expansion Audio Mixing** - MMC5 pulse + PCM audio mixed into APU output
+* ✅ **Capability‑Driven Mappers** - The PPU interacts with mappers strictly through declared behavioral capabilities (no mapper IDs, no method‑presence heuristics)
+* ✅ **Accurate Mapper Emulation** - Correct MMC1, MMC2, MMC3, MMC4, MMC5, and Sunsoft FME-7 (Mapper 069) behavior
+* ✅ **CHR Latch Accuracy** - Hardware‑accurate MMC2/MMC4 latch triggering using real pattern fetch addresses (fine‑Y + both bitplanes)
+* ✅ **Stable IRQ Timing** - MMC3 IRQs driven by true A12 rising‑edge detection
+* ✅ **Multiple ROM Loading Options** - Load ROM button, drag & drop, or click overlay
+* ✅ **Save States** - Quick save/load with multiple slots (F5/F8)
+* ✅ **Gamepad Support** - Native browser Gamepad API integration
+* ✅ **Debug Snapshots** - F9 dumps mapper/PPU state at configurable scanline
 
 ## Quick Start
 
