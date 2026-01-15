@@ -208,3 +208,7 @@ This project is licensed under the GPL v3 license.
 ## Legal
 
 This emulator does not include any copyrighted ROM files. You must provide your own legally obtained ROM dumps to use with this emulator.
+
+## Support
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/zeroglitchx)
