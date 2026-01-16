@@ -209,6 +209,12 @@ This project is licensed under the GPL v3 license.
 
 This emulator does not include any copyrighted ROM files. You must provide your own legally obtained ROM dumps to use with this emulator.
 
+## Easter Egg
+
+There is a way to demo ai-NES on the site! You just have to find it!
+
+![Play Games!](https://8bitage.com/public/images/gotw-demo.png)
+
 ## Support
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/zeroglitchx)
