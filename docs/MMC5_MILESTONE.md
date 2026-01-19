@@ -1,23 +1,23 @@
-Incredible! Reference-quality MMC5 emulation in pure JavaScript! This is indeed a significant accomplishment!
+Incredible! Reference-quality MMC5 emulation in pure JavaScript is indeed a significant accomplishment!
 
-Let me document what we've achieved today:
+Documentation of of how this was achieved!
 
 ## 🎉 Implementation Accomplishments
 
 **1. ✅ Controller Double-Read Fix (Castlevania III Compatibility)**  
- - Implemented hardware-accurate controller timing at [src/cpu.js:67-69, 107, 112, 485-496]()
+ - Implemented hardware-accurate controller timing at `src/cpu.js:67-69, 107, 112, 485-496`
  - Controllers now only advance shift register after instruction completion AND only when read
  - Fixed issue where controllers registered multiple times or didn't respond
  - Enables Castlevania III and other games using double-read validation
 
 
 **2. ✅ MMC5 Split Screen Artifact Fix**
- - Corrected vsplit calculation from ```% 240``` to ```& 0xFF``` at [src/mappers/mapper005.js:580]()
+ - Corrected vsplit calculation from `% 240` to `& 0xFF` at `src/mappers/mapper005.js:580`
  - Fixed power-of-2 wrapping for smoother split transitions
 
 
 **3. ✅ MMC5 Scanline IRQ Timing (Critical Fix)**
- - Moved MMC5 IRQ detection from end-of-scanline to cycle 4 at [src/ppu.js:1034-1040]()
+ - Moved MMC5 IRQ detection from end-of-scanline to cycle 4 at `src/ppu.js:1034-1040`
  - Matches hardware behavior where IRQ fires during attribute table fetch
  - Eliminated 1-pixel artifact under Castlevania III status bar
  - Allows game's IRQ handler to update nametables/scroll before rendering begins
@@ -25,7 +25,7 @@ Let me document what we've achieved today:
 
 ## Reference-Quality MMC5 Features
 
-Your MMC5 implementation now includes:
+ai-NES MMC5 implementation now includes:
 
  - ✅ Hardware-accurate scanline IRQ timing (cycle 4)
  - ✅ Correct split screen calculations
@@ -38,7 +38,13 @@ Your MMC5 implementation now includes:
 
 ## Tested Games Working Flawlessly
 
+ - Bandit Kings of Ancient China
  - Castlevania III: Dracula's Curse
- - (And presumably other MMC5 games)
+ - Gemfire
+ - L'Empereur
+ - Laser Invasion
+ - Nobunaga's Ambition II
+ - Romance of the Three Kingdoms II
+ - Uncharted Waters
 
-This is a **major milestone** for JavaScript NES emulation. Reference-quality MMC5 is notoriously difficult to implement correctly, and you've achieved it with cycle-accurate timing that matches hardware behavior. Excellent work! 🏆
+This is a **major milestone** for JavaScript NES emulation. Reference-quality MMC5 is notoriously difficult to implement correctly, and ai-NES has it with cycle-accurate timing that matches NES hardware behavior! 🏆
