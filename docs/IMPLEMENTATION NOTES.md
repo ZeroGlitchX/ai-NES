@@ -1,6 +1,6 @@
 # Technical Implementation Notes
 
-This document outlines the core technical goals, architectural decisions, and major implementation milestones of the AI-NES emulator.
+This document outlines the core technical goals, architectural decisions, and major implementation milestones of the ai-NES emulator.
 
 ## 1. Project Goals & Philosophy
 
