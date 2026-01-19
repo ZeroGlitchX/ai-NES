@@ -4,17 +4,31 @@
 
 :root {
     --controls-pad-x: 24px;
+    --gold: #d4a017;
+    --gold-light: #f0c040;
+    --gold-dark: #a07810;
+    --cabinet-bg: #1a1a1a;
+    --panel-bg: #252525;
+    --panel-border: #3a3a3a;
+    --paper-white: #fef9f3;
+    --paper-grey: #f4f4f4;
+    --ink-black: #1a1a1a;
 }
 
 html {
-    background: #505050;
+    background: #fef9f3;
 }
 
 body {
-    background-color: #505050;
+    background-color: var(--paper-grey);
     background-image:
-        linear-gradient(to bottom, #505050 0%, #454545 100%),
-        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.05) 2px, rgba(0,0,0,.05) 4px);
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0,0,0,0.1) 2px,
+            rgba(0,0,0,0.1) 4px
+        );
     color: #e0e0e0;
     font-family: 'Press Start 2P', 'Courier New', monospace;
     text-align: center;
@@ -27,83 +41,53 @@ body {
 }
 
 h3 {
-    margin-bottom: 30px;
-    text-transform: uppercase;
+    margin-bottom: 20px;
+    /*text-transform: uppercase;*/
     letter-spacing: 4px;
-    font-size: 28px;
-    color: #00aa33;
+    font-size: 24px;
+    color: var(--ink-black);
     text-shadow:
-        0 0 8px #00aa33,
-        0 0 15px #00aa33;
+        2px 2px 0 #000,
+        0 0 10px rgba(212, 160, 23, 0.5);
     font-weight: normal;
-    animation: flicker 3s infinite alternate;
-}
-
-@keyframes flicker {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.95; }
-    75% { opacity: 0.97; }
 }
 
 #gameContainer {
     position: relative;
     display: inline-block;
-    background: #050505;
-    padding: 20px 25px 35px 25px;
-    border-radius: 16px;
+    background: #000;
+    padding: 1px;
+    border-radius: 12px;
+    border: 6px solid var(--gold);
     box-shadow:
-        0 0 0 8px #1a1a28,
-        0 0 0 12px #0f0f18,
-        inset 0 0 40px rgba(0,0,0,0.9),
-        0 20px 60px rgba(0,0,0,0.7);
-    background-image:
-        radial-gradient(circle at 50% 0%, #2a2a38 0%, #0f0f18 70%);
+        0 0 0 8px #000,
+        0 10px 40px rgba(0,0,0,0.5);
     transition: all 0.3s ease;
 }
 
 #gameContainer::before {
-    content: '';
-    position: absolute;
-    top: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 5px;
-    background: linear-gradient(to right, #555, #333, #555);
-    border-radius: 3px;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+    display: none;
 }
 
 #gameContainer::after {
-    content: 'AI-NES';
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #666;
-    font-size: 7px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    display: none;
 }
 
 #gameContainer.drag-over {
-    transform: scale(1.02);
+    border-color: var(--gold-light);
     box-shadow:
-        0 0 0 8px #00ff41,
-        0 0 0 12px #00cc33,
-        inset 0 0 40px rgba(0,255,65,0.2),
-        0 20px 60px rgba(0,255,65,0.3);
+        0 0 0 4px #000,
+        0 0 15px rgba(212, 160, 23, 0.4),
+        0 10px 40px rgba(0,0,0,0.6);
 }
 
 .crt-container {
     position: relative;
     display: inline-block;
     background: #000;
-    padding: 12px;
-    border-radius: 8px;
-    box-shadow:
-        inset 0 0 20px rgba(0,0,0,0.9),
-        inset 0 0 4px rgba(255,255,255,0.1);
+    padding: 0;
+    border-radius: 6px;
+    border: none;
 }
 
 .crt-container::before {
@@ -116,14 +100,14 @@ h3 {
     background:
         repeating-linear-gradient(
             0deg,
-            rgba(0,0,0,0.15) 0px,
+            rgba(0,0,0,0.1) 0px,
             transparent 1px,
             transparent 2px,
-            rgba(0,0,0,0.15) 3px
+            rgba(0,0,0,0.1) 3px
         );
     pointer-events: none;
     z-index: 2;
-    border-radius: 8px;
+    border-radius: 5px;
 }
 
 .crt-container::after {
@@ -133,10 +117,10 @@ h3 {
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.3) 100%);
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.2) 100%);
     pointer-events: none;
     z-index: 3;
-    border-radius: 8px;
+    border-radius: 5px;
 }
 
 canvas {
@@ -149,18 +133,14 @@ canvas {
     border-radius: 4px;
     position: relative;
     z-index: 1;
-    filter: contrast(1);
-    box-shadow:
-        0 0 20px rgba(0,200,255,0.1),
-        inset 0 0 20px rgba(0,0,0,0.3);
 }
 
 #overlay {
     position: absolute;
-    top: 12px;
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: rgba(0, 0, 0, 0.95);
     display: flex;
     flex-direction: column;
@@ -169,16 +149,16 @@ canvas {
     cursor: pointer;
     z-index: 10;
     transition: opacity 0.3s;
-    border-radius: 4px;
+    border-radius: 6px;
 }
 
 #overlay h2 {
     margin: 0 0 20px 0;
-    color: #00ff41;
+    color: var(--gold);
     font-size: 16px;
     text-transform: uppercase;
     letter-spacing: 3px;
-    text-shadow: 0 0 10px #00ff41;
+    text-shadow: 2px 2px 0 #000;
     animation: blink 2s infinite;
 }
 
@@ -189,30 +169,30 @@ canvas {
 
 #overlay p {
     font-size: 10px;
-    color: #ccc;
+    color: #aaa;
     margin: 8px 0;
     letter-spacing: 1px;
 }
 
 #overlay .sub-text {
     font-size: 8px;
-    color: #888;
+    color: #666;
     margin-top: 20px;
 }
 
 .controls-bar {
-    margin-top: 20px;
+    margin-top: 35px;
     display: inline-flex;
     justify-content: space-between;
     gap: 15px;
     align-items: center;
-    background: linear-gradient(to bottom, #2a2a3e, #1a1a2e);
+    background: var(--panel-bg);
     padding: 12px var(--controls-pad-x);
     border-radius: 8px;
-    border: 2px solid #3a3a4e;
+    border: 4px solid var(--gold-dark);
     box-shadow:
         0 4px 12px rgba(0,0,0,0.4),
-        inset 0 1px 0 rgba(255,255,255,0.1);
+        inset 0 1px 0 rgba(255,255,255,0.05);
     width: 500px;
 }
 
@@ -221,9 +201,9 @@ canvas {
 }
 
 .load-rom-btn {
-    background: linear-gradient(to bottom, #3a3a4e, #2a2a3e);
-    color: #e0e0e0;
-    border: 2px solid #4a4a5e;
+    background: linear-gradient(to bottom, #3a3a3a, #252525);
+    color: var(--gold);
+    border: 2px solid var(--gold-dark);
     padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
@@ -233,16 +213,17 @@ canvas {
     text-transform: uppercase;
     box-shadow:
         0 2px 4px rgba(0,0,0,0.3),
-        inset 0 1px 0 rgba(255,255,255,0.1);
+        inset 0 1px 0 rgba(255,255,255,0.05);
     transition: all 0.1s;
 }
 
 .load-rom-btn:hover {
-    background: linear-gradient(to bottom, #4a4a5e, #3a3a4e);
+    background: linear-gradient(to bottom, #4a4a4a, #3a3a3a);
+    border-color: var(--gold);
     transform: translateY(-1px);
     box-shadow:
         0 4px 8px rgba(0,0,0,0.4),
-        inset 0 1px 0 rgba(255,255,255,0.2);
+        inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 .load-rom-btn:active {
@@ -258,13 +239,13 @@ canvas {
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    background: linear-gradient(to bottom, #2a2a3e, #1a1a2e);
+    background: var(--panel-bg);
     padding: 10px var(--controls-pad-x);
     border-radius: 8px;
-    border: 2px solid #3a3a4e;
+    border: 4px solid var(--gold-dark);
     box-shadow:
         0 4px 12px rgba(0,0,0,0.4),
-        inset 0 1px 0 rgba(255,255,255,0.1);
+        inset 0 1px 0 rgba(255,255,255,0.05);
     width: 500px;
 }
 
@@ -272,7 +253,7 @@ canvas {
     font-size: 8px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: #aaa;
+    color: var(--gold);
 }
 
 .audio-toggle-row {
@@ -284,9 +265,9 @@ canvas {
 
 .audio-toggle,
 .audio-mix {
-    background: linear-gradient(to bottom, #3a3a4e, #2a2a3e);
-    color: #e0e0e0;
-    border: 2px solid #4a4a5e;
+    background: linear-gradient(to bottom, #3a3a3a, #252525);
+    color: #aaa;
+    border: 2px solid #4a4a4a;
     padding: 6px 10px;
     border-radius: 4px;
     cursor: pointer;
@@ -296,17 +277,17 @@ canvas {
     text-transform: uppercase;
     box-shadow:
         0 2px 4px rgba(0,0,0,0.3),
-        inset 0 1px 0 rgba(255,255,255,0.1);
+        inset 0 1px 0 rgba(255,255,255,0.05);
     transition: all 0.1s;
 }
 
 .audio-toggle:hover,
 .audio-mix:hover {
-    background: linear-gradient(to bottom, #4a4a5e, #3a3a4e);
+    background: linear-gradient(to bottom, #4a4a4a, #3a3a3a);
     transform: translateY(-1px);
     box-shadow:
         0 4px 8px rgba(0,0,0,0.4),
-        inset 0 1px 0 rgba(255,255,255,0.2);
+        inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 .audio-toggle:active,
@@ -318,11 +299,11 @@ canvas {
 }
 
 .audio-toggle.active {
-    color: #00ff41;
-    border-color: #00ff41;
+    color: var(--gold);
+    border-color: var(--gold);
     box-shadow:
-        0 0 8px rgba(0,255,65,0.6),
-        inset 0 1px 0 rgba(255,255,255,0.2);
+        0 0 8px rgba(212, 160, 23, 0.4),
+        inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 #gamepadStatus {
@@ -332,13 +313,13 @@ canvas {
 }
 
 .connected {
-    color: #00ff41;
-    text-shadow: 0 0 5px #00ff41;
+    color: #4a4;
+    text-shadow: 0 0 5px rgba(68, 170, 68, 0.5);
 }
 
 .disconnected {
-    color: #ff4444;
-    text-shadow: 0 0 5px #ff4444;
+    color: #a44;
+    text-shadow: 0 0 5px rgba(170, 68, 68, 0.5);
 }
 
 .volume-control {
@@ -359,33 +340,33 @@ canvas {
 
 input[type=range] {
     cursor: pointer;
-    accent-color: #00ff41;
+    accent-color: #4a4;
     height: 4px;
     width: 80px;
 }
 
 .save-controls {
-    margin-top: 15px;
+    margin-top: 12px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 15px;
     align-items: center;
-    background: linear-gradient(to bottom, #2a2a3e, #1a1a2e);
+    background: var(--panel-bg);
     padding: 15px var(--controls-pad-x);
     border-radius: 8px;
-    border: 2px solid #3a3a4e;
+    border: 4px solid var(--gold-dark);
     box-shadow:
         0 4px 12px rgba(0,0,0,0.4),
-        inset 0 1px 0 rgba(255,255,255,0.1);
+        inset 0 1px 0 rgba(255,255,255,0.05);
     width: 500px;
     justify-content: center;
 }
 
 .save-controls button {
-    background: linear-gradient(to bottom, #3a3a4e, #2a2a3e);
-    color: #e0e0e0;
-    border: 2px solid #4a4a5e;
+    background: linear-gradient(to bottom, #3a3a3a, #252525);
+    color: #ccc;
+    border: 2px solid #4a4a4a;
     padding: 8px 16px;
     border-radius: 4px;
     cursor: pointer;
@@ -395,16 +376,16 @@ input[type=range] {
     text-transform: uppercase;
     box-shadow:
         0 2px 4px rgba(0,0,0,0.3),
-        inset 0 1px 0 rgba(255,255,255,0.1);
+        inset 0 1px 0 rgba(255,255,255,0.05);
     transition: all 0.1s;
 }
 
 .save-controls button:hover {
-    background: linear-gradient(to bottom, #4a4a5e, #3a3a4e);
+    background: linear-gradient(to bottom, #4a4a4a, #3a3a3a);
     transform: translateY(-1px);
     box-shadow:
         0 4px 8px rgba(0,0,0,0.4),
-        inset 0 1px 0 rgba(255,255,255,0.2);
+        inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 .save-controls button:active {
@@ -415,9 +396,9 @@ input[type=range] {
 }
 
 .save-controls select {
-    background: linear-gradient(to bottom, #3a3a4e, #2a2a3e);
-    color: #e0e0e0;
-    border: 2px solid #4a4a5e;
+    background: linear-gradient(to bottom, #3a3a3a, #252525);
+    color: #ccc;
+    border: 2px solid #4a4a4a;
     padding: 8px 12px;
     border-radius: 4px;
     font-size: 8px;
@@ -428,8 +409,8 @@ input[type=range] {
 .instructions {
     font-size: 10px;
     color: #888;
-    margin-top: 15px;
-    background: linear-gradient(to bottom, #2a2a3e, #1a1a2e);
+    margin-top: 12px;
+    background: var(--panel-bg);
     letter-spacing: 1px;
     padding: 12px 24px;
     display: flex;
@@ -437,10 +418,10 @@ input[type=range] {
     justify-content: center;
     align-items: center;
     border-radius: 8px;
-    border: 2px solid #3a3a4e;
+    border: 4px solid var(--gold-dark);
     box-shadow:
         0 4px 12px rgba(0,0,0,0.4),
-        inset 0 1px 0 rgba(255,255,255,0.1);
+        inset 0 1px 0 rgba(255,255,255,0.05);
     width: 500px;
 }
 
@@ -452,13 +433,13 @@ input[type=range] {
 }
 
 .key {
-    color: #00ff41;
-    background: #1a1a2e;
+    color: var(--gold);
+    background: #1a1a1a;
     padding: 4px 8px;
     border-radius: 4px;
     font-family: 'Press Start 2P', monospace;
-    border: 1px solid #3a3a4e;
-    box-shadow: 0 2px 0 #0a0a1e;
+    border: 2px solid var(--gold-dark);
+    box-shadow: 0 2px 0 #0a0a0a;
     display: inline-block;
 }
 
@@ -469,17 +450,17 @@ input[type=range] {
 }
 
 #status {
-    margin-top: 15px;
+    margin-top: 12px;
     padding: 10px;
-    background: linear-gradient(to bottom, #0a0a1e, #1a1a2e);
+    background: #1a1a1a;
     border-radius: 8px;
-    border: 2px solid #2a2a3e;
+    border: 4px solid var(--gold-dark);
     font-family: 'Courier New', monospace;
     font-size: 10px;
     width: 500px;
     text-align: center;
     overflow-y: auto;
-    max-height: 250px;
+    max-height: 300px;
     box-shadow:
         inset 0 2px 8px rgba(0,0,0,0.5),
         0 4px 12px rgba(0,0,0,0.3);
@@ -491,18 +472,18 @@ input[type=range] {
 }
 
 .success {
-    color: #00ff41;
-    text-shadow: 0 0 5px rgba(0,255,65,0.5);
+    color: #4a4;
+    text-shadow: 0 0 5px rgba(68, 170, 68, 0.5);
 }
 
 .error {
-    color: #ff4444;
-    text-shadow: 0 0 5px rgba(255,68,68,0.5);
+    color: #a44;
+    text-shadow: 0 0 5px rgba(170, 68, 68, 0.5);
 }
 
 .info {
-    color: #44aaff;
-    text-shadow: 0 0 5px rgba(68,170,255,0.5);
+    color: var(--gold);
+    text-shadow: 0 0 5px rgba(212, 160, 23, 0.3);
 }
 
 @media (max-width: 768px) {
@@ -512,7 +493,7 @@ input[type=range] {
     }
 
     h3 {
-        font-size: 20px;
+        font-size: 18px;
     }
 
     .controls-bar {
