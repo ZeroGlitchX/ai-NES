@@ -23,13 +23,13 @@ A modernized Nintendo Entertainment System (NES) emulator written in JavaScript.
 2. Serve the files with any HTTP server:
 
    ```bash
-   # Python 3
-   python -m http.server 8000
+   # nginx
+   http://localhost/ai-nes/nes.htm
    
    # Node.js
    npx serve
    ```
-3. Open `http://localhost:8000/nes.htm` in your browser
+3. Open `http://localhost/ai-nes/nes.htm` in your browser
 4. Click to start or drag a `.nes` ROM file onto the emulator
 
 ## Controls
@@ -113,6 +113,7 @@ Gamepad support is automatic via the Gamepad API.
 | NINA-03 / NINA-06 (79) | ✅          | CHR-ROM: 8KB switchable banks                |
 | DxROM (206)            | ✅          | Extends MMC3 \| No Scanline IRQ              |
 
+
 ## Design Philosophy
 
 This emulator intentionally avoids hard‑coding mapper IDs inside the PPU or CPU. Instead:
@@ -137,20 +138,20 @@ The emulator uses an **AudioWorklet-based** audio system:
 
 ### Save States
 
-- **F5** — Quick save to current slot
-- **F8** — Quick load from current slot
+- **F5** - Quick save to current slot
+- **F8** - Quick load from current slot
 - Multiple save slots available via UI dropdown
 
 ### Debugging
 
 The debug module (`debug/debug.js`) provides Mesen-comparable state dumps:
 
-- **F9** — Request snapshot at scanline 241 (VBlank start)
+- **F9** - Request snapshot at scanline 241 (VBlank start)
 - Outputs PPU registers, nametables, palette, OAM, scroll state
 - MMC5 games include full mapper state + audio registers
 - Console access: `nesDebug.outputAll()` or `nesDebug.targetScanline = 100`
 
-See `docs/DEBUG INTEGRATION.md` for full documentation.
+See **[DEBUG_INTEGRATION.md](https://github.com/ZeroGlitchX/ai-NES/blob/main/docs/DEBUG_INTEGRATION.md)** for full documentation.
 
 ## Credits
 
@@ -179,7 +180,7 @@ And a special thanks to **[AccuracyCoin](https://github.com/100thCoin/AccuracyCo
 
 ## Compatibility Notes
 
-If you want to make any improvements, please take a look at the **[TECHNICAL.md](https://github.com/ZeroGlitchX/ai-NES/blob/main/docs/TECHNICAL.md)** document and give it a whirl! Currently, there is no native or intentional support for homebrew. This release focuses on commercial releases.
+If you want to make any improvements, please take a look at the **[TECHNICAL.md](https://github.com/ZeroGlitchX/ai-NES/blob/main/docs/TECHNICAL.md)** and **[ARCHITECTURE.md](https://github.com/ZeroGlitchX/ai-NES/blob/main/docs/ARCHITECTURE.md)** documents and give it a whirl! Currently, there is no native or intentional support for homebrew. The opcodes are not implemented. This release focuses on commercial releases.
 
 There are about 15 games with compatibility issues that I know of:
 
@@ -208,13 +209,3 @@ This project is licensed under the GPL v3 license.
 ## Legal
 
 This emulator does not include any copyrighted ROM files. You must provide your own legally obtained ROM dumps to use with this emulator.
-
-## Easter Egg
-
-There is a way to demo ai-NES on the site! You just have to find it!
-
-[![Press Start!](https://8bitage.com/public/images/gotw-demo-01.png)](https://8bitage.com)
-
-## Support
-
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/zeroglitchx)
