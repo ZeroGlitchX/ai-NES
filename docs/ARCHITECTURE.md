@@ -1,4 +1,4 @@
-# AI-NES Architecture
+# ai-NES Architecture
 
 This document details the architectural decisions behind AI-NES, specifically focusing on the **Capability-Driven Mapper System** and the **Cycle-Interleaved Timing Model** as implemented in the current codebase.
 
@@ -18,9 +18,9 @@ if (this.mapper.id === 9) {
 
 This approach is fragile. Adding a new mapper requires modifying the core PPU logic, risking regressions for every other game.
 
-### The AI-NES Approach
+### The ai-NES Approach
 
-AI-NES inverts this dependency. The PPU and CPU are **mapper-agnostic**. They do not know or care which mapper ID is loaded. Instead, they interact with mappers through a defined set of **Behavioral Capabilities**.
+ai-NES inverts this dependency. The PPU and CPU are **mapper-agnostic**. They do not know or care which mapper ID is loaded. Instead, they interact with mappers through a defined set of **Behavioral Capabilities**.
 
 ### How It Works
 
