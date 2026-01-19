@@ -23,7 +23,7 @@ This is a critical accuracy feature that many test ROMs verify and some games de
 
 ### ✅ 1. CPU Open Bus (Merged Details)
 
-**Implementation:** [src/cpu.js:64, 155-157, 169-170](../src/cpu.js)
+**Implementation:** `src/cpu.js:64, 155-157, 169-170`
 
 - Added `this.dataBus` state variable (reset initializes to 0)
 - Updated on **every** `cpuRead()` and `cpuWrite()`
@@ -60,7 +60,7 @@ cpuRead(0x5000)  → 0x42 ✅ (open bus)
 
 ### ✅ 2. APU Open Bus (Merged Details)
 
-**Implementation:** [src/apu.js:993-1014](../src/apu.js), [src/cpu.js:141-146](../src/cpu.js)
+**Implementation:** `src/apu.js:993-1014`, `src/cpu.js:141-146`
 
 - APU only returns status for $4015 reads
 - All other APU registers ($4000-$4013, $4017) return `undefined`
@@ -99,7 +99,7 @@ cpuRead(0x4000) → APU returns undefined → CPU uses dataBus → 0x80 ✅
 
 ### ✅ 3. OAM DMA Open Bus (Already Correct)
 
-**Implementation:** [src/ppu.js:833-851](../src/ppu.js)
+**Implementation:** `src/ppu.js:833-851`
 
 - OAM DMA uses `cpu.cpuRead()` to read 256 bytes
 - Each read automatically updates `dataBus`
@@ -111,7 +111,7 @@ cpuRead(0x4000) → APU returns undefined → CPU uses dataBus → 0x80 ✅
 
 ### ✅ 4. DMC DMA Open Bus (Merged Details)
 
-**Implementation:** [src/apu.js:107](../src/apu.js)
+**Implementation:** `src/apu.js:107`
 
 - Changed from `mmap.cpuRead()` to `cpu.cpuRead()`
 - DMC sample reads now update `dataBus`
@@ -144,7 +144,7 @@ cpuRead(0x5000) → Returns 0x42 ✅ (open bus uses last DMA value)
 
 ### ✅ 5. PPU Open Bus (Already Implemented)
 
-**Implementation:** [src/ppu.js:52](../src/ppu.js) - `ioBus` variable
+**Implementation:** `src/ppu.js:52` - `ioBus` variable
 
 - PPU has separate `ioBus` latch for write-only registers
 - Reading $2000, $2001, $2003, $2005, $2006 returns `ioBus`
@@ -159,7 +159,7 @@ cpuRead(0x5000) → Returns 0x42 ✅ (open bus uses last DMA value)
 
 ### ✅ 6. Controller Open Bus (Approximation)
 
-**Implementation:** [src/controller.js:28](../src/controller.js)
+**Implementation:** `src/controller.js:28`
 
 - Controllers return `0x40 | buttonData`
 - Bits 5-7 are open bus (approximated as $40)
@@ -336,20 +336,20 @@ nextSample() {
 
 ## Files Modified
 
-1. **[src/cpu.js](../src/cpu.js)**
+1. **`src/cpu.js`**
    - Added `dataBus` state variable (line 64)
    - Track `dataBus` on all reads (line 155-157)
    - Track `dataBus` on all writes (line 169-170)
    - Handle APU undefined returns (line 141-146)
    - Added `dataBus` to save state (line 27)
 
-2. **[src/apu.js](../src/apu.js)**
+2. **`src/apu.js`**
    - Check address in `readReg()` (line 993-1014)
    - Return undefined for non-$4015 registers
    - Use `cpu.cpuRead()` for DMC DMA (line 107)
 
-3. **[src/ppu.js](../src/ppu.js)** - No changes (already correct)
-4. **[src/controller.js](../src/controller.js)** - No changes (already correct)
+3. **`src/ppu.js`** - No changes (already correct)
+4. **`src/controller.js`** - No changes (already correct)
 
 ---
 
