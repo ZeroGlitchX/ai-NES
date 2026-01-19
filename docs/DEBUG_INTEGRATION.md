@@ -1,4 +1,4 @@
-# AI-NES Debug Module Integration Guide
+# ai-NES Debug Module Integration Guide
 
 ## Overview
 
