@@ -775,19 +775,19 @@ export class PAPU {
   }
 
   buildSquareTable() {
-    const table = new Float32Array(31 * 16);
+    const table = new Float32Array(31 << 4);
     for (let i = 0; i < table.length; i++) {
-      const n = i / 16;
+      const n = i * 0.0625; // 1/16 - faster than division
       table[i] = n === 0 ? 0 : 95.52 / (8128.0 / n + 100);
     }
     return table;
   }
 
   buildTndTable() {
-    const max = 203 * 16;
+    const max = 203 << 4;
     const table = new Float32Array(max);
     for (let i = 0; i < table.length; i++) {
-      const n = i / 16;
+      const n = i * 0.0625; // 1/16 - faster than division
       table[i] = n === 0 ? 0 : 163.67 / (24329.0 / n + 100);
     }
     return table;
@@ -1103,10 +1103,17 @@ export class PAPU {
       (noi * 2 * this.panning.noise.r) +
       (dmc * this.panning.dmc.r);
 
-    const pulseIndexL = Math.min(this.square_table.length - 1, Math.round(pulseL * 16));
-    const pulseIndexR = Math.min(this.square_table.length - 1, Math.round(pulseR * 16));
-    const tndIndexL = Math.min(this.tnd_table.length - 1, Math.round(tndL * 16));
-    const tndIndexR = Math.min(this.tnd_table.length - 1, Math.round(tndR * 16));
+    // Optimize: (x + 0.5) | 0 is faster than Math.round, ternary is faster than Math.min
+    const sqLen = this.square_table.length - 1;
+    const tndLen = this.tnd_table.length - 1;
+    let pulseIndexL = (pulseL * 16 + 0.5) | 0;
+    let pulseIndexR = (pulseR * 16 + 0.5) | 0;
+    let tndIndexL = (tndL * 16 + 0.5) | 0;
+    let tndIndexR = (tndR * 16 + 0.5) | 0;
+    pulseIndexL = pulseIndexL > sqLen ? sqLen : pulseIndexL;
+    pulseIndexR = pulseIndexR > sqLen ? sqLen : pulseIndexR;
+    tndIndexL = tndIndexL > tndLen ? tndLen : tndIndexL;
+    tndIndexR = tndIndexR > tndLen ? tndLen : tndIndexR;
 
     let sampleL = this.square_table[pulseIndexL] + this.tnd_table[tndIndexL];
     let sampleR = this.square_table[pulseIndexR] + this.tnd_table[tndIndexR];

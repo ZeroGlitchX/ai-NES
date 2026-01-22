@@ -16,36 +16,14 @@ export class ROM {
     this.mapperName[5] = "Nintendo MMC5";
     this.mapperName[6] = "FFE F4xxx";
     this.mapperName[7] = "AOROM";
-    this.mapperName[8] = "FFE F3xxx";
     this.mapperName[9] = "Nintendo MMC2";
-    this.mapperName[10] = "Nintendo MMC4";
     this.mapperName[11] = "Color Dreams Chip";
-    this.mapperName[12] = "FFE F6xxx";
-    this.mapperName[15] = "100-in-1 switch";
-    this.mapperName[16] = "Bandai chip";
-    this.mapperName[17] = "FFE F8xxx";
-    this.mapperName[18] = "Jaleco SS8806 chip";
-    this.mapperName[19] = "Namcot 106 chip";
-    this.mapperName[20] = "Famicom Disk System";
-    this.mapperName[21] = "Konami VRC4a";
-    this.mapperName[22] = "Konami VRC2a";
-    this.mapperName[23] = "Konami VRC2a";
-    this.mapperName[24] = "Konami VRC6";
     this.mapperName[25] = "Konami VRC4b";
-    this.mapperName[32] = "Irem G-101 chip";
-    this.mapperName[33] = "Taito TC0190/TC0350";
     this.mapperName[34] = "32kB ROM switch";
     this.mapperName[47] = "NES-QJ Chip";
-    this.mapperName[64] = "Tengen RAMBO-1 chip";
-    this.mapperName[65] = "Irem H-3001 chip";
     this.mapperName[66] = "GxROM Chip";
-    this.mapperName[67] = "SunSoft3 chip";
-    this.mapperName[68] = "SunSoft4 chip";
     this.mapperName[69] = "SunSoft5 FME-7 Chip";
-    this.mapperName[71] = "Camerica chip";
-    this.mapperName[78] = "Irem 74HC161/32-based";
     this.mapperName[79] = "NINA-03/NINA-06 Chip";
-    this.mapperName[91] = "Pirate HK-SF3 chip";
     this.mapperName[206] = "DxROM";
 
     // Mirroring types (match PPU expectations):
@@ -142,12 +120,13 @@ export class ROM {
 
     for (let i = 0; i < this.romCount; i++) {
       this.rom[i] = new Array(16384);
+      const prgBase = i << 14; // << 14 = * 16384
       for (let j = 0; j < 16384; j++) {
         const byteVal = (offset + j < data.length)
           ? (isUint8Array ? data[offset + j] : (data.charCodeAt(offset + j) & 0xff))
           : 0;
         this.rom[i][j] = byteVal;
-        this.prg[i * 16384 + j] = byteVal; // Also store in flat array
+        this.prg[prgBase + j] = byteVal; // Also store in flat array
       }
       offset += 16384;
     }
@@ -161,12 +140,13 @@ export class ROM {
     this.vrom = new Array(this.vromCount);
     for (let i = 0; i < this.vromCount; i++) {
       this.vrom[i] = new Array(4096);
+      const chrBase = i << 12; // << 12 = * 4096
       for (let j = 0; j < 4096; j++) {
         const byteVal = (offset + j < data.length)
           ? (isUint8Array ? data[offset + j] : (data.charCodeAt(offset + j) & 0xff))
           : 0;
         this.vrom[i][j] = byteVal;
-        this.chr[i * 4096 + j] = byteVal; // Also store in flat array
+        this.chr[chrBase + j] = byteVal; // Also store in flat array
       }
       offset += 4096;
     }
@@ -202,7 +182,6 @@ export class ROM {
       case 6: return "FFE F4xxx";
       case 7: return "AxROM";
       case 9: return "MMC2 (PxROM)";
-      case 10: return "MMC4 (FxROM)";
       case 11: return "Color Dreams";
       case 25: return "VRC4";
       case 34: return "BNROM";

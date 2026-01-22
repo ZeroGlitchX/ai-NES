@@ -1,9 +1,7 @@
 import { toJSON, fromJSON } from "./utils.js";
 
 // ============================================================================
-// PPU (WebNES-style core)
-// Module 1: Registers, VRAM, scrolling, NMI, OAM, palette, mirroring
-// No rendering logic yet.
+// PPU - Registers, VRAM, scrolling, NMI, OAM, palette, mirroring
 // ============================================================================
 
 export class PPU {
@@ -231,8 +229,10 @@ export class PPU {
     const reg = addr & 7;
     this.ioBus = value; // Update I/O bus latch
 
-    /* PPU warm-up: During warmup (~29,658 CPU cycles), the PPU is warming up and ignores writes to some registers.
-       Real NES behavior: Writes to $2000, $2001, $2005, $2006 are ignored. */
+    /**
+     PPU warm-up: During warmup (~29,658 CPU cycles), the PPU is warming up and ignores writes to some registers.
+     Real NES behavior: Writes to $2000, $2001, $2005, $2006 are ignored.
+    **/
     if (this.inWarmup && (reg === 0 || reg === 1 || reg === 5 || reg === 6)) {
       return; // Silently ignore writes to PPUCTRL, PPUMASK, PPUSCROLL, PPUADDR during warmup
     }
@@ -549,8 +549,7 @@ export class PPU {
   // Background pixel fetch (logical, no framebuffer write yet)
   // =========================================================================
   //
-  // Returns: 
-  //   { colorIndex: 0-3, paletteIndex: 0-3, finalPaletteEntry: 0-31 }
+  // Returns: { colorIndex: 0-3, paletteIndex: 0-3, finalPaletteEntry: 0-31 }
   // Or null if BG is disabled.
   getBackgroundPixel() {
     if ((this.mask & 0x08) === 0) {
@@ -585,8 +584,7 @@ export class PPU {
 
   // =========================================================================
   // Get sprite pixel at current (scanline, x)
-  // Returns:
-  //   { colorIndex, paletteIndex, priority, isSprite0 } or null
+  // Returns: { colorIndex, paletteIndex, priority, isSprite0 } or null
   // =========================================================================
   getSpritePixel(x, y) {
     if ((this.mask & 0x10) === 0) {
@@ -934,8 +932,7 @@ renderPixel() {
   }
 
   // =========================================================================
-  // PPU main step (one PPU cycle)
-  // Call this 3 times per CPU cycle.
+  // PPU main step (one PPU cycle). Call this 3 times per CPU cycle.
   // =========================================================================
   step() {
     // Rendering is enabled if either BG or sprites are visible

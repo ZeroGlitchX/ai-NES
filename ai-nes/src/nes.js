@@ -150,7 +150,7 @@ export class NES {
       }
 
       // For each CPU cycle, PPU runs 3 cycles
-      let ppuCycles = cpuCycles * 3;
+      let ppuCycles = (cpuCycles << 1) + cpuCycles; // Equivalent to cpuCycles * 3
       
       while (this.ppuCyclesToSkip > 0 && ppuCycles > 0) {
         this.ppuCyclesToSkip--;

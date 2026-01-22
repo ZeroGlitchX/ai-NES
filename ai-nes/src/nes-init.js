@@ -275,13 +275,14 @@ function onAnimationFrame() {
   if (!fastForward) {
     topUpAudioBuffer(AUDIO_MAX_CATCHUP_FRAMES);
   }
+  
   flushAudio();
 
   // Fix: Properly convert 32-bit RGB to RGBA byte order for canvas
   for (let i = 0; i < FRAMEBUFFER_SIZE; i++) {
     const rgb = framebufferU32[i];
-    const base = i * 4;
-    imageData.data[base + 0] = (rgb >> 16) & 0xFF;  // R
+    const base = i << 2; // << 2 = * 4
+    imageData.data[base] = (rgb >> 16) & 0xFF;      // R
     imageData.data[base + 1] = (rgb >> 8) & 0xFF;   // G
     imageData.data[base + 2] = rgb & 0xFF;          // B
     imageData.data[base + 3] = 0xFF;                // A (opaque)
