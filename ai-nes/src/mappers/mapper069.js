@@ -109,14 +109,14 @@ export default class Mapper069 extends Mapper {
             const offset = address & 0x1FFF;
             if (this.workRamUseRam) {
                 if (!this.workRamReadWrite) return this.getOpenBus(address);
-                const bankCount = this.prgRam.length / 0x2000;
+                const bankCount = this.prgRam.length >> 13; // >> 13 = / 0x2000
                 const bank = bankCount ? (this.workRamBank % bankCount) : 0;
-                return this.prgRam[(bank * 0x2000) + offset] || 0;
+                return this.prgRam[(bank << 13) + offset] || 0; // << 13 = * 0x2000
             }
 
             if (!this.prgData || this.prgBankCount === 0) return 0;
             const bank = this.workRamBank % this.prgBankCount;
-            return this.prgData[(bank * 0x2000) + offset] || 0;
+            return this.prgData[(bank << 13) + offset] || 0; // << 13 = * 0x2000
         }
 
         if (address >= 0x8000) {
@@ -131,9 +131,9 @@ export default class Mapper069 extends Mapper {
     cpuWrite(address, value) {
         if (address >= 0x6000 && address < 0x8000) {
             if (this.workRamUseRam && this.workRamReadWrite) {
-                const bankCount = this.prgRam.length / 0x2000;
+                const bankCount = this.prgRam.length >> 13; // >> 13 = / 0x2000
                 const bank = bankCount ? (this.workRamBank % bankCount) : 0;
-                this.prgRam[(bank * 0x2000) + (address & 0x1FFF)] = value;
+                this.prgRam[(bank << 13) + (address & 0x1FFF)] = value; // << 13 = * 0x2000
             }
             return;
         }

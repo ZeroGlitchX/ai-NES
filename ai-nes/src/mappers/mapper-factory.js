@@ -1,5 +1,4 @@
-// Mapper Factory for AI-NES
-// Creates the appropriate mapper instance based on ROM header
+// Mapper Factory - Creates the appropriate mapper instance based on ROM header
 import Mapper000 from './mapper000.js';
 import Mapper001 from './mapper001.js';
 import Mapper002 from './mapper002.js';
@@ -90,7 +89,7 @@ export function createMapper(mapperId, cartridge, nes) {
  * Check if a mapper is supported
  * @param {number} mapperId - Mapper number to check
  * @returns {boolean} True if mapper is implemented
- */
+**/
 export function isMapperSupported(mapperId) {
   return mapperId in registry;
 }
@@ -98,7 +97,7 @@ export function isMapperSupported(mapperId) {
 /**
  * Get list of all supported mapper IDs
  * @returns {number[]} Array of supported mapper numbers
- */
+**/
 export function getSupportedMappers() {
   return Object.keys(registry).map(Number);
 }

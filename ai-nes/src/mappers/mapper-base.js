@@ -18,7 +18,7 @@ export default class Mapper {
         this.prgBankCount = this.prgData ? (this.prgData.length >> 13) : 0; // 8KB banks (>> 13 = / 0x2000)
         this.chrBankCount = this.chrData ? (this.chrData.length >> 10) : 0;  // 1KB banks (>> 10 = / 0x400)
 
-        // Bank mapping arrays (WebNES-style)
+        // Bank mapping arrays
         // PRG: 4 slots of 8KB each ($8000-$9FFF, $A000-$BFFF, $C000-$DFFF, $E000-$FFFF)
         // CHR: 8 slots of 1KB each ($0000-$03FF, $0400-$07FF, ..., $1C00-$1FFF)
         this.prgPagesMap = new Uint32Array(4);  // 4 x 8KB = 32KB PRG address space
@@ -49,6 +49,7 @@ export default class Mapper {
     // ==========================================================
     // HELPER FUNCTIONS
     // ==========================================================
+
     fillRam(ram) {
         if (!ram) return;
         const pattern = this.nes.opts.ramInitPattern;
@@ -64,6 +65,7 @@ export default class Mapper {
     // ==========================================================
     // BANK SWITCHING INFRASTRUCTURE (WebNES-style)
     // ==========================================================
+
     // PRG bank count helpers
     get8kPrgBankCount() { return this.prgBankCount; }
     get16kPrgBankCount() { return this.prgBankCount >> 1; }
@@ -250,7 +252,6 @@ export default class Mapper {
     // ==========================================================
     // SAVE STATE SUPPORT
     // ==========================================================
-
     toJSON() { 
         return {}; 
     }

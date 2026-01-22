@@ -172,7 +172,7 @@ export default class Mapper005 extends Mapper {
     const { bank, offset, isRam } = this.resolvePrgBank(address);
     if (isRam) {
       const index = bank % this.prgRamBankCount;
-      return this.prgRam[(index * 0x2000) + offset];
+      return this.prgRam[(index << 13) + offset]; // << 13 = * 0x2000
     }
 
     const rom = (bank & 0x80) !== 0;
@@ -180,11 +180,11 @@ export default class Mapper005 extends Mapper {
     if (rom) {
       if (!this.prgData || this.prgBankCount === 0) return 0;
       const index = bankIndex % this.prgBankCount;
-      return this.prgData[(index * 0x2000) + offset];
+      return this.prgData[(index << 13) + offset]; // << 13 = * 0x2000
     }
 
     const index = bankIndex % this.prgRamBankCount;
-    return this.prgRam[(index * 0x2000) + offset];
+    return this.prgRam[(index << 13) + offset]; // << 13 = * 0x2000
   }
 
   writePrg(address, value) {
@@ -192,7 +192,7 @@ export default class Mapper005 extends Mapper {
     if (isRam) {
       if (this.ramWriteProtect[0] === 2 && this.ramWriteProtect[1] === 1) {
         const index = bank % this.prgRamBankCount;
-        this.prgRam[(index * 0x2000) + offset] = value;
+        this.prgRam[(index << 13) + offset] = value; // << 13 = * 0x2000
       }
       return;
     }
@@ -201,7 +201,7 @@ export default class Mapper005 extends Mapper {
     if (!rom && this.ramWriteProtect[0] === 2 && this.ramWriteProtect[1] === 1) {
       const bankIndex = bank & 0x7F;
       const index = bankIndex % this.prgRamBankCount;
-      this.prgRam[(index * 0x2000) + offset] = value;
+      this.prgRam[(index << 13) + offset] = value; // << 13 = * 0x2000
     }
   }
 
@@ -211,11 +211,11 @@ export default class Mapper005 extends Mapper {
       return (bank << 13) | (address & 0x1FFF);
     }
     if (this.characterMode === 1) {
-      const bank = this.characterSpriteBank[((address >> 12) * 4) + 3];
+      const bank = this.characterSpriteBank[((address >> 12) << 2) + 3]; // << 2 = * 4
       return (bank << 12) | (address & 0x0FFF);
     }
     if (this.characterMode === 2) {
-      const bank = this.characterSpriteBank[((address >> 11) * 2) + 1];
+      const bank = this.characterSpriteBank[((address >> 11) << 1) + 1]; // << 1 = * 2
       return (bank << 11) | (address & 0x07FF);
     }
     const bank = this.characterSpriteBank[address >> 10];
@@ -233,7 +233,7 @@ export default class Mapper005 extends Mapper {
       return (bank << 12) | masked;
     }
     if (this.characterMode === 2) {
-      const bank = this.characterBackgroundBank[((masked >> 11) * 2) + 1];
+      const bank = this.characterBackgroundBank[((masked >> 11) << 1) + 1]; // << 1 = * 2
       return (bank << 11) | (masked & 0x07FF);
     }
     const bank = this.characterBackgroundBank[masked >> 10];
@@ -549,7 +549,7 @@ export default class Mapper005 extends Mapper {
       const v = ppu ? ppu.v : 0;
       const coarseX = v & 0x1F;
       const coarseY = (v >> 5) & 0x1F;
-      const shift = ((coarseY & 0x02) ? 4 : 0) | ((coarseX & 0x02) ? 2 : 0);
+      const shift = ((coarseY << 1) & 0x04) | (coarseX & 0x02); // Branchless attribute shift
 
       let attrByte = 0;
       if (mode === 0) {
@@ -579,7 +579,7 @@ export default class Mapper005 extends Mapper {
           const scanline = this.nes && this.nes.ppu ? this.nes.ppu.scanline : 0;
           const v = (scanline + this.vsplitScroll) % 240;
           const tileY = (v >> 3) & 0x1F;
-          const index = (tileY * 32 + tileX) & 0x03FF;
+          const index = ((tileY << 5) + tileX) & 0x03FF; // << 5 = * 32
           this.lastBgVsplitActive = true;
           this.lastBgVsplitFineY = v & 7;
           this.lastBgExram = this.exram[index];
@@ -629,7 +629,7 @@ export default class Mapper005 extends Mapper {
       return attr | (attr << 2) | (attr << 4) | (attr << 6);
     }
     if (this.exramMode !== 1) return null;
-    const index = ((coarseY & 0x1F) * 32 + (coarseX & 0x1F)) & 0x03FF;
+    const index = (((coarseY & 0x1F) << 5) + (coarseX & 0x1F)) & 0x03FF; // << 5 = * 32
     const attr = (this.exram[index] >> 6) & 0x03;
     return attr | (attr << 2) | (attr << 4) | (attr << 6);
   }

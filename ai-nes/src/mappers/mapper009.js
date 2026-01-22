@@ -57,7 +57,7 @@ export default class Mapper009 extends Mapper {
             else if (address < 0xE000) bank = this.prgBank2;
             else bank = this.prgBank3;
 
-            const offset = (bank * 0x2000) + (address & 0x1FFF);
+            const offset = (bank << 13) + (address & 0x1FFF); // << 13 = * 0x2000
             return this.prgData[offset];
         }
         return undefined;
@@ -106,7 +106,7 @@ export default class Mapper009 extends Mapper {
                 bank = (this.latch1 === 0xFD) ? this.chrBank1FD : this.chrBank1FE;
             }
 
-            const offset = (bank * 0x1000) + (address & 0x0FFF);
+            const offset = (bank << 12) + (address & 0x0FFF); // << 12 = * 0x1000
             return this.chrData[offset];
         }
         return null;

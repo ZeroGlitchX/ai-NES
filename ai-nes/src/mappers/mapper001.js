@@ -40,7 +40,7 @@ export default class Mapper001 extends Mapper {
         // Initialize properties based on ROM data
         this.prg = this.nes.rom.prg;
         this.prgSize = this.prg ? this.prg.length : 0;
-        this.prgBankCount = Math.floor(this.prgSize / 0x4000); // Number of 16KB banks
+        this.prgBankCount = this.prgSize >> 14; // Number of 16KB banks (>> 14 = / 0x4000)
 
         // Validate PRG bank count is power of 2 for proper masking
         if (this.prgBankCount > 0 && (this.prgBankCount & (this.prgBankCount - 1)) !== 0) {
@@ -301,45 +301,45 @@ export default class Mapper001 extends Mapper {
             case 1:
                 // 32KB mode: switch 32KB at $8000. Low bit of bank is ignored.
                 const bank32 = (((this.prgBank & 0xE) | prgHighBit) >> 1);
-                this.prgBank0Offset = bank32 * 0x8000;
+                this.prgBank0Offset = bank32 << 15; // << 15 = * 0x8000
                 this.prgBank1Offset = this.prgBank0Offset + 0x4000;
                 break;
 
             case 2:
                 // Fix first bank at $8000, switch 16KB bank at $C000
-                this.prgBank0Offset = prgHighBit * 0x4000;
-                this.prgBank1Offset = (((this.prgBank & 0xF) | prgHighBit) & prgBankMask) * 0x4000;
+                this.prgBank0Offset = prgHighBit << 14; // << 14 = * 0x4000
+                this.prgBank1Offset = (((this.prgBank & 0xF) | prgHighBit) & prgBankMask) << 14;
                 break;
 
             case 3:
                 // Switch 16KB bank at $8000, fix last bank at $C000
                 // For 512KB ROMs, the fixed bank is the last bank of the selected 256KB block.
-                this.prgBank0Offset = (((this.prgBank & 0xF) | prgHighBit) & prgBankMask) * 0x4000;
-                this.prgBank1Offset = ((0x0F | prgHighBit) & prgBankMask) * 0x4000;
+                this.prgBank0Offset = (((this.prgBank & 0xF) | prgHighBit) & prgBankMask) << 14;
+                this.prgBank1Offset = ((0x0F | prgHighBit) & prgBankMask) << 14;
                 break;
         }
 
         // CHR Banking
-        const chrBankCount = this.usingChrRam ? 2 : (this.chrSize / 0x1000); // 4KB banks (assume 8KB CHR-RAM)
+        const chrBankCount = this.usingChrRam ? 2 : (this.chrSize >> 12); // 4KB banks (>> 12 = / 0x1000, assume 8KB CHR-RAM)
         const chrBankMask = (chrBankCount > 0) ? chrBankCount - 1 : 0;
 
         if (chrMode === 0) {
             // 8KB mode: use chrBank0, ignoring low bit
             const bank8 = (this.chrBank0 & 0x1E) & chrBankMask;
-            this.chrBank0Offset = bank8 * 0x1000;
-            this.chrBank1Offset = ((bank8 + 1) & chrBankMask) * 0x1000;
-            
+            this.chrBank0Offset = bank8 << 12; // << 12 = * 0x1000
+            this.chrBank1Offset = ((bank8 + 1) & chrBankMask) << 12;
+
             // Update standard page map for consistency/debug
-            for (let i = 0; i < 4; i++) this.chrPagesMap[i] = this.chrBank0Offset + (i * 0x400);
-            for (let i = 0; i < 4; i++) this.chrPagesMap[i+4] = this.chrBank1Offset + (i * 0x400);
+            for (let i = 0; i < 4; i++) this.chrPagesMap[i] = this.chrBank0Offset + (i << 10); // << 10 = * 0x400
+            for (let i = 0; i < 4; i++) this.chrPagesMap[i+4] = this.chrBank1Offset + (i << 10);
         } else {
             // 4KB mode: independent banks
-            this.chrBank0Offset = (this.chrBank0 & chrBankMask) * 0x1000;
-            this.chrBank1Offset = (this.chrBank1 & chrBankMask) * 0x1000;
-            
+            this.chrBank0Offset = (this.chrBank0 & chrBankMask) << 12;
+            this.chrBank1Offset = (this.chrBank1 & chrBankMask) << 12;
+
             // Update standard page map for consistency/debug
-            for (let i = 0; i < 4; i++) this.chrPagesMap[i] = this.chrBank0Offset + (i * 0x400);
-            for (let i = 0; i < 4; i++) this.chrPagesMap[i+4] = this.chrBank1Offset + (i * 0x400);
+            for (let i = 0; i < 4; i++) this.chrPagesMap[i] = this.chrBank0Offset + (i << 10);
+            for (let i = 0; i < 4; i++) this.chrPagesMap[i+4] = this.chrBank1Offset + (i << 10);
         }
     }
 
