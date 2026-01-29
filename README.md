@@ -204,11 +204,6 @@ There are about 15 games with compatibility issues that I know of:
 
 ---
 
-## Easter Eggs
-
-[![ai-NES Play](https://8bitage.com/public/images/gotw-demo-01.png)](https://www.8bitage.com/play)
-
-
 ## License
 
 This project is licensed under the GPL v3 license.
